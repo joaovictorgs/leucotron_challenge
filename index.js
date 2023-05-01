@@ -14,7 +14,12 @@ console.log("Servidor iniciado na porta 8080: http://localhost:8080");
 })
 
 app.get("/", async (req, res) => {
+    try{
+    database.mailSent()
     res.send("pagina inicial leucotron_challenge")
+    }catch(err){
+        res.send(err)
+    }
 })
 app.get("/allUsers", async(req,res)=>{
     try {
@@ -68,8 +73,39 @@ app.delete("/delete/user",async(req,res)=>{
         }
     }
 })
+app.post("/addEvent", async(req,res)=>{
+    try{
+        reqs++;
+        if (reqs == 1) {
+            await client.connect();
+        }
+        await database.addevent(client,req.body)
+        res.send(req.body)
+    }catch(err){
+        res.send("Ocorreu um erro: " + err)
+    }finally {
+        reqs--
+        if (reqs == 0) {
+            await client.close();
+        }
+    }
+})
+app.get("/event",async(req,res)=>{
+    try {
+        reqs++;
+        if (reqs == 1) {
+            await client.connect();
+        }
+        const users = await database.getEvent(client,req.body);
+        res.send(users)
 
-//login ou cadastro
+    } catch (err) {
+        res.send("Ocorreu um erro: " + err)
+    } finally {
+        reqs--
+        if (reqs == 0) {
+            await client.close();
+        }
+    }
+})
 
-//mostrar as reuniões que a pessoa está convidada
-//
