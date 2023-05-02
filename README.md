@@ -24,7 +24,7 @@ Json enviado para essa rota deve conter o campo:
     Rota para ver todos os usuarios criados: GET http://localhost:8080/allUsers
 
     Rota para criar um usuário: POST http://localhost:8080/create/user
-jSON enviado para essa rota deve conter os campos:
+jSON enviado para a rota /create/user deve conter os campos:
 {
 	"email":"victor.godoy@email.com",
 	"user":"victor",
