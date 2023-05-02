@@ -1,4 +1,5 @@
 const { json } = require("body-parser");
+const { ObjectId } = require("mongodb");
 const nodemailer = require("nodemailer");
 
 
@@ -19,7 +20,7 @@ const transporter = nodemailer.createTransport({
 async function mailSent(assunto,email,user) {
 
     await transporter.sendMail({
-        text: "convite do evento " + assunto.atividades.descricao+ " no dia " +assunto.atividades.data + " ás "+ assunto.atividades.hora+ " no local "+ assunto.atividades.localizacao + " com duração prevista de "+ assunto.atividades.duracao,
+        text: "convite do evento " + assunto.atividades.descricao+ " no dia " +assunto.atividades.data + " ás "+ assunto.atividades.hora+ " no local "+ assunto.atividades.loalizacao + " com duração prevista de "+ assunto.atividades.duracao,
         subject: 'convite de reunião de ' + user,
         from: "botresponsebot@gmail.com",
         to: email,
@@ -78,5 +79,10 @@ async function getEvent(client,email) {
         return {}
     }
 }
+//função para deletar um evento pelo ID dele
+async function deleteEvent(client,eventId){
+    const result= await client.db("lc").collection("events").deleteOne({"_id":new ObjectId(eventId._id)})
+    return result
+}
 
-module.exports = {getAllUser,createUser,deleteUser, addevent,mailSent,getEvent}
+module.exports = {getAllUser,createUser,deleteUser, addevent,mailSent,getEvent,deleteEvent}

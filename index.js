@@ -108,4 +108,20 @@ app.get("/event",async(req,res)=>{
         }
     }
 })
-
+app.delete("/delete/event",async(req,res)=>{
+    try{
+        reqs++;
+        if (reqs == 1) {
+            await client.connect();
+        }
+        await database.deleteEvent(client,req.body)
+        res.send(req.body)
+    }catch(err){
+        res.send("Ocorreu um erro: " + err)
+    }finally {
+        reqs--
+        if (reqs == 0) {
+            await client.close();
+        }
+    }
+})
